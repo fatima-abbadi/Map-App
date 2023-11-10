@@ -5,16 +5,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using TestApiJwt.Models; // Replace with your actual namespace
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 [Route("api/shops")]
 [ApiController]
 public class ShopController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext _context; // Replace YourDbContext with your actual DbContext.
+    private readonly UserManager<ApplicationUser> _userManager;// Inject your DbContext into the controller.
 
-    public ShopController(ApplicationDbContext context)
+    public ShopController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     {
         _context = context;
+        _userManager = userManager;
     }
 
     // GET: api/shops
@@ -42,9 +45,15 @@ public class ShopController : ControllerBase
 
     // POST: api/shops
     [HttpPost]
-    //[Authorize] // Requires authorization (you can adjust the policy as needed)
+    [Authorize] // Requires authorization (you can adjust the policy as needed)
     public async Task<ActionResult<Shop>> PostShop(Shop shop)
     {
+        // Get the currently authenticated user
+        var userId = User.FindFirst("uid")?.Value;
+
+        // Assign the user's ID to the shop
+        shop.UserId = userId;
+
         _context.Shops.Add(shop);
         await _context.SaveChangesAsync();
 
@@ -53,7 +62,7 @@ public class ShopController : ControllerBase
 
     // PUT: api/shops/5
     [HttpPut("{id}")]
-   // [Authorize] // Requires authorization (you can adjust the policy as needed)
+    // [Authorize] // Requires authorization (you can adjust the policy as needed)
     public async Task<IActionResult> PutShop(int id, Shop shop)
     {
         if (id != shop.ShopId)

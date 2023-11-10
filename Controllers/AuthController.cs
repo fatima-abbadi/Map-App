@@ -30,9 +30,10 @@ namespace TestApiJwt.Controllers
             SetRefreshTokenInCookie(result.RefreshToken, result.RefreshTokenExpiration);
 
             return Ok(result);
+            // return Ok(new { token = result.Token, expiration = result.ExpiresOn });
         }
 
-        [HttpPost("token")]
+        [HttpPost("login")]
         public async Task<IActionResult> GetTokenAsync([FromBody] TokenRequestModel model)
         {
             var result = await _authService.GetTokenAsync(model);

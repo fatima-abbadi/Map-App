@@ -4,9 +4,9 @@ using System.Data.Common;
 
 namespace TestApiJwt.Models
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>// inherit from our customized class application user 
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)//constructor for configuring the database connection and options for Entity Framework
         {
         }
         public DbSet<Shop> Shops { get; set; }

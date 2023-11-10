@@ -12,6 +12,8 @@ namespace TestApiJwt.Models
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
+
+        [Column(TypeName = "decimal(19,4)")]
         public decimal ProductPrice { get; set; }
         public string ProductImage { get; set; }
 
