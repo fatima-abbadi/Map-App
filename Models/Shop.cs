@@ -21,5 +21,5 @@ public class Shop
     // Foreign key to link a shop to a user
     public string UserId { get; set; }
     public ApplicationUser? User { get; set; }
-    public ICollection<Product> Products { get; set; }
+    public ICollection<Product>? Products { get; set; }
 }
