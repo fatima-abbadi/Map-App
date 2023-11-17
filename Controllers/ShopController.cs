@@ -88,7 +88,7 @@ public class ShopController : ControllerBase
             }
         }
 
-        return NoContent();
+        return Ok();
     }
 
     // DELETE: api/shops/5
