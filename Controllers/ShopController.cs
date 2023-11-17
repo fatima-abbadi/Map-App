@@ -45,7 +45,7 @@ public class ShopController : ControllerBase
 
     // POST: api/shops
     [HttpPost]
-    [Authorize] // Requires authorization (you can adjust the policy as needed)
+    [Authorize]
     public async Task<ActionResult<Shop>> PostShop(Shop shop)
     {
         // Get the currently authenticated user
