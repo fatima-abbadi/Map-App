@@ -42,6 +42,7 @@ public class ShopController : ControllerBase
 
         return Ok(shop);
     }
+    //get :api/shops/userShops
     [HttpGet("userShops")]
     [Authorize]
     public async Task<ActionResult<IEnumerable<Shop>>> GetUserShops()
@@ -56,6 +57,28 @@ public class ShopController : ControllerBase
 
         return Ok(shops);
     }
+
+    [HttpGet("userShops/{shopId}")]
+    [Authorize]
+    public async Task<ActionResult<Shop>> GetUserShopById(int shopId)
+    {
+        // Get the currently authenticated user
+        var userId = User.FindFirst("uid")?.Value;
+
+        // Retrieve the specific shop associated with the current user and the specified shop ID
+        var specificShop = await _context.Shops
+            .Where(s => s.UserId == userId && s.ShopId == shopId)
+            .SingleOrDefaultAsync();
+
+        if (specificShop == null)
+        {
+            return NotFound(); // Return 404 if the specific shop is not found
+        }
+
+        return Ok(specificShop);
+    }
+
+
 
     // POST: api/shops
     [HttpPost]
