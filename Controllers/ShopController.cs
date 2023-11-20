@@ -42,6 +42,20 @@ public class ShopController : ControllerBase
 
         return Ok(shop);
     }
+    [HttpGet("userShops")]
+    [Authorize]
+    public async Task<ActionResult<IEnumerable<Shop>>> GetUserShops()
+    {
+        // Get the currently authenticated user
+        var userId = User.FindFirst("uid")?.Value;
+
+        // Retrieve shops associated with the current user
+        var shops = await _context.Shops
+            .Where(s => s.UserId == userId)
+            .ToListAsync();
+
+        return Ok(shops);
+    }
 
     // POST: api/shops
     [HttpPost]
