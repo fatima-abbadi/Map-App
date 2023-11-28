@@ -17,11 +17,8 @@ namespace TestApiJwt.Models
         public decimal ProductPrice { get; set; }
         public string ProductImage { get; set; }
 
-        // Foreign key to link a product to a shop
-        public int ShopId { get; set; }
-        public Shop?  Shop { get; set; }
-
-        // Foreign key to link a product to a category
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
     }
 }
 

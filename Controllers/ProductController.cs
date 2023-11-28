@@ -22,7 +22,7 @@ namespace TestApiJwt.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var products = await _context.Products.Include(x => x.Shop).ToListAsync();
+            var products = await _context.Products.Include(x => x.Category).ToListAsync();
             return products;
         }
 

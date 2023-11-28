@@ -12,14 +12,10 @@ public class Shop
     public double ShopLocationLatitude { get; set; }
     public double ShopLocationLongitude { get; set; }
     public string ShopDescription { get; set; }
-    /// <summary>
-    /// category
-    /// </summary>
+    
     public bool IsApproved { get; set; }
-    // Add other shop-related properties
-
-    // Foreign key to link a shop to a user
+   
     public string UserId { get; set; }
     public ApplicationUser? User { get; set; }
-    public ICollection<Product>? Products { get; set; }
+    public ICollection<Category>? Categories { get; set; }
 }
