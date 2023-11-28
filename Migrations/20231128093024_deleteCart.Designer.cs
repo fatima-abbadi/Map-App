@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestApiJwt.Models;
 
@@ -11,9 +12,10 @@ using TestApiJwt.Models;
 namespace TestApiJwt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231128093024_deleteCart")]
+    partial class deleteCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -188,7 +190,7 @@ namespace TestApiJwt.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Shops", (string)null);
+                    b.ToTable("Shops");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
@@ -266,31 +268,6 @@ namespace TestApiJwt.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("TestApiJwt.Models.Cart", b =>
-                {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"), 1L, 1);
-
-                    b.Property<DateTime?>("OrderDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Carts", (string)null);
-                });
-
             modelBuilder.Entity("TestApiJwt.Models.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -314,7 +291,7 @@ namespace TestApiJwt.Migrations
 
                     b.HasIndex("ShopId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.Product", b =>
@@ -347,7 +324,7 @@ namespace TestApiJwt.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -414,7 +391,7 @@ namespace TestApiJwt.Migrations
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
                 {
-                    b.OwnsMany("TestApiJwt.Models.ApplicationUser.RefreshTokens#TestApiJwt.Models.RefreshToken", "RefreshTokens", b1 =>
+                    b.OwnsMany("TestApiJwt.Models.RefreshToken", "RefreshTokens", b1 =>
                         {
                             b1.Property<string>("ApplicationUserId")
                                 .HasColumnType("nvarchar(450)");
@@ -440,24 +417,13 @@ namespace TestApiJwt.Migrations
 
                             b1.HasKey("ApplicationUserId", "Id");
 
-                            b1.ToTable("RefreshToken", (string)null);
+                            b1.ToTable("RefreshToken");
 
                             b1.WithOwner()
                                 .HasForeignKey("ApplicationUserId");
                         });
 
                     b.Navigation("RefreshTokens");
-                });
-
-            modelBuilder.Entity("TestApiJwt.Models.Cart", b =>
-                {
-                    b.HasOne("TestApiJwt.Models.ApplicationUser", "User")
-                        .WithMany("Carts")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.Category", b =>
@@ -489,8 +455,6 @@ namespace TestApiJwt.Migrations
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Carts");
-
                     b.Navigation("Shops");
                 });
 
