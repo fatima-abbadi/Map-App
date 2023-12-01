@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestApiJwt.Models;
 
@@ -11,9 +12,10 @@ using TestApiJwt.Models;
 namespace TestApiJwt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231201181628_order1")]
+    partial class order1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,28 +191,6 @@ namespace TestApiJwt.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Shops");
-                });
-
-            modelBuilder.Entity("TestApiJwt.Models.Advertisement", b =>
-                {
-                    b.Property<int>("AdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdId"), 1L, 1);
-
-                    b.Property<string>("AdDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AdId");
-
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("Advertisements");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
@@ -539,16 +519,6 @@ namespace TestApiJwt.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TestApiJwt.Models.Advertisement", b =>
-                {
-                    b.HasOne("Shop", "Shop")
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .IsRequired();
-
-                    b.Navigation("Shop");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>

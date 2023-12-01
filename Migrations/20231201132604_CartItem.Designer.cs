@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestApiJwt.Models;
 
@@ -11,9 +12,10 @@ using TestApiJwt.Models;
 namespace TestApiJwt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231201132604_CartItem")]
+    partial class CartItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -191,28 +193,6 @@ namespace TestApiJwt.Migrations
                     b.ToTable("Shops");
                 });
 
-            modelBuilder.Entity("TestApiJwt.Models.Advertisement", b =>
-                {
-                    b.Property<int>("AdId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AdId"), 1L, 1);
-
-                    b.Property<string>("AdDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.HasKey("AdId");
-
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("Advertisements");
-                });
-
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -324,17 +304,12 @@ namespace TestApiJwt.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.HasKey("CartItemId");
 
                     b.HasIndex("CartId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("CartItems");
                 });
@@ -384,66 +359,6 @@ namespace TestApiJwt.Migrations
                     b.HasIndex("ShopId");
 
                     b.ToTable("Favorites");
-                });
-
-            modelBuilder.Entity("TestApiJwt.Models.OrderHeader", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("paymentMethod")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OrderHeaders");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.Product", b =>
@@ -541,16 +456,6 @@ namespace TestApiJwt.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TestApiJwt.Models.Advertisement", b =>
-                {
-                    b.HasOne("Shop", "Shop")
-                        .WithMany()
-                        .HasForeignKey("ShopId")
-                        .IsRequired();
-
-                    b.Navigation("Shop");
-                });
-
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
                 {
                     b.OwnsMany("TestApiJwt.Models.RefreshToken", "RefreshTokens", b1 =>
@@ -593,6 +498,7 @@ namespace TestApiJwt.Migrations
                     b.HasOne("TestApiJwt.Models.ApplicationUser", "User")
                         .WithMany("Carts")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -606,14 +512,7 @@ namespace TestApiJwt.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TestApiJwt.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .IsRequired();
-
                     b.Navigation("Cart");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.Category", b =>
@@ -644,20 +543,6 @@ namespace TestApiJwt.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TestApiJwt.Models.OrderHeader", b =>
-                {
-                    b.HasOne("TestApiJwt.Models.ApplicationUser", null)
-                        .WithMany("OrderHeaders")
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.HasOne("TestApiJwt.Models.ApplicationUser", "user")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .IsRequired();
-
-                    b.Navigation("user");
-                });
-
             modelBuilder.Entity("TestApiJwt.Models.Product", b =>
                 {
                     b.HasOne("TestApiJwt.Models.Category", "Category")
@@ -681,8 +566,6 @@ namespace TestApiJwt.Migrations
                     b.Navigation("Carts");
 
                     b.Navigation("Favorites");
-
-                    b.Navigation("OrderHeaders");
 
                     b.Navigation("Shops");
                 });

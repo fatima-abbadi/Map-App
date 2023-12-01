@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -18,48 +19,46 @@ namespace TestApiJwt.Controllers
             _context = context;
         }
 
-        // GET: api/Cart
-        [HttpGet]
-        public async Task<IActionResult> GetCarts()
-        {
-            var carts = await _context.Carts.ToListAsync();
-            return Ok(carts);
-        }
-
-        // GET: api/Cart/5
+        // GET: api/Cart/1
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetCart(int id)
+        public async Task<ActionResult<Cart>> GetCart(int id)
         {
-            var cart = await _context.Carts.FindAsync(id);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems) // Include CartItems
+                .FirstOrDefaultAsync(c => c.CartId == id);
 
             if (cart == null)
             {
                 return NotFound();
             }
 
-            return Ok(cart);
+            return cart;
         }
 
         // POST: api/Cart
         [HttpPost]
-        public async Task<IActionResult> PostCart(Cart cart)
+        [Authorize]
+        public async Task<ActionResult<Cart>> PostCart(Cart cart)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            // Set the order date to the current UTC time
+            cart.OrderDate = DateTime.UtcNow;
 
-            // Assuming UserId is provided in the request (you may adjust this logic based on your authentication setup)
-            // For example, you might retrieve the current user's ID from the authentication token.
-            cart.UserId = "user123";
+            var userId = User.FindFirst("uid")?.Value;
 
+            // Assign the user's ID to the shop
+            cart.UserId = userId;
+
+            // Add the cart to the context
             _context.Carts.Add(cart);
+
+            // Save changes to the database
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetCart), new { id = cart.CartId }, cart);
+            // Return the created cart
+            return CreatedAtAction("GetCart", new { id = cart.CartId }, cart);
         }
 
-        // PUT: api/Cart/5
+        // PUT: api/Cart/1
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCart(int id, Cart cart)
         {
@@ -89,7 +88,7 @@ namespace TestApiJwt.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Cart/5
+        // DELETE: api/Cart/1
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCart(int id)
         {
