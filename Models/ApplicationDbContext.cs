@@ -14,6 +14,9 @@ namespace TestApiJwt.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
+        public DbSet <CartItem> CartItems { get; set; }
+        public DbSet<OrderHeader> OrderHeaders { get; set; }
+        public DbSet<Advertisement>Advertisements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -40,7 +43,7 @@ namespace TestApiJwt.Models
             modelBuilder.Entity<Cart>()
                .HasOne(c => c.User)
                .WithMany(u => u.Carts)
-               .HasForeignKey(c => c.UserId);
+               .HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull); ;
 
 
             modelBuilder.Entity<Cart>()
@@ -63,6 +66,31 @@ namespace TestApiJwt.Models
                 .WithMany(s => s.Favorites)
                 .HasForeignKey(f => f.ShopId)
                 .OnDelete(DeleteBehavior.ClientSetNull); // Cascade delete when Shop is deleted
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(ci => ci.Cart)
+                .WithMany(c => c.CartItems)
+                .HasForeignKey(ci => ci.CartId);
+
+            modelBuilder.Entity<CartItem>()
+               .HasOne(ci => ci.Product)
+               .WithMany()
+               .HasForeignKey(ci => ci.ProductId)
+               .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<OrderHeader>()
+               .HasOne(ci => ci.user)
+               .WithMany()
+               .HasForeignKey(ci => ci.UserId)
+               .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Advertisement>()
+              .HasOne(ci => ci.Shop)
+              .WithMany()
+              .HasForeignKey(ci => ci.ShopId)
+              .OnDelete(DeleteBehavior.ClientSetNull);
+
+
 
 
         }

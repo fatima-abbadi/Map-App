@@ -18,6 +18,8 @@ namespace TestApiJwt.Models
         public DateTime? OrderDate { get; set; }//in order header 
 
         public ApplicationUser? User { get; set; }
-     
+     public ICollection<CartItem>? CartItems { get; set; }
+      
+
     }
 }
