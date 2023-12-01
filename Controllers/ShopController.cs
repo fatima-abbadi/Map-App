@@ -139,6 +139,11 @@ public class ShopController : ControllerBase
             return NotFound();
         }
 
+        // Manually delete associated favorites
+        var associatedFavorites = _context.Favorites.Where(f => f.ShopId == id);
+        _context.Favorites.RemoveRange(associatedFavorites);
+
+        // Now, delete the shop
         _context.Shops.Remove(shop);
         await _context.SaveChangesAsync();
 
@@ -149,5 +154,6 @@ public class ShopController : ControllerBase
     {
         return _context.Shops.Any(e => e.ShopId == id);
     }
+
 }
 

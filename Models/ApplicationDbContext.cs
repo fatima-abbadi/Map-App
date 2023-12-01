@@ -13,7 +13,7 @@ namespace TestApiJwt.Models
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
-        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,13 +48,22 @@ namespace TestApiJwt.Models
                 .HasColumnType("decimal(18,2)");
 
 
-            // Configure the relationship between CartItem and Product
-            modelBuilder.Entity<CartItem>()
-                .HasOne(ci => ci.Product)
-                .WithMany()
-                .HasForeignKey(ci => ci.ProductId);
+            // Configure the many-to-many relationship between User and Shop for favorites
+            modelBuilder.Entity<Favorite>()
+                .HasKey(f => new { f.UserId, f.ShopId });
 
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Favorite>()
+                .HasOne(f => f.User)
+                .WithMany(u => u.Favorites)
+                .HasForeignKey(f => f.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull); // Cascade delete when User is deleted
+
+            modelBuilder.Entity<Favorite>()
+                .HasOne(f => f.Shop)
+                .WithMany(s => s.Favorites)
+                .HasForeignKey(f => f.ShopId)
+                .OnDelete(DeleteBehavior.ClientSetNull); // Cascade delete when Shop is deleted
+
 
         }
     }

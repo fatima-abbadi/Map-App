@@ -18,4 +18,5 @@ public class Shop
     public string UserId { get; set; }
     public ApplicationUser? User { get; set; }
     public ICollection<Category>? Categories { get; set; }
+    public ICollection<Favorite>? Favorites { get; set; }
 }
