@@ -59,10 +59,9 @@ public class FavoriteController : ControllerBase
 
         return Ok("Favorite added successfully.");
     }
-
-    // DELETE api/favorite/{shopId}
-    [HttpDelete("{shopId}")]
-    public IActionResult DeleteFavorite(int shopId)
+    // DELETE api/favorite/{favoriteId}
+    [HttpDelete("{favoriteId}")]
+    public IActionResult DeleteFavorite(int favoriteId)
     {
         // Extract the user id from the token
         var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
@@ -72,7 +71,7 @@ public class FavoriteController : ControllerBase
             return BadRequest("User id not found in token.");
         }
 
-        var favorite = _context.Favorites.Find(userId, shopId);
+        var favorite = _context.Favorites.Find(userId, favoriteId);
 
         if (favorite == null)
         {

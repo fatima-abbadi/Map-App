@@ -15,7 +15,10 @@ namespace TestApiJwt.Models
 
         [Column(TypeName = "decimal(19,4)")]
         public decimal ProductPrice { get; set; }
-        public string ProductImage { get; set; }
+        public string? ProductImage { get; set; }
+
+        [NotMapped] // Not mapped to the database, used for file upload
+        public IFormFile PhotoFile { get; set; }
 
         public int CategoryId { get; set; }
         public Category? Category { get; set; }

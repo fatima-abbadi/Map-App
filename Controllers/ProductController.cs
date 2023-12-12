@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TestApiJwt.Migrations;
 using TestApiJwt.Models;
 
 namespace TestApiJwt.Controllers
@@ -40,15 +41,57 @@ namespace TestApiJwt.Controllers
             return product;
         }
 
-        // POST: api/products
-        [HttpPost]
-        public async Task<ActionResult<Product>> PostProduct(Product product)
-        {
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+        [HttpPost]
+
+        public async Task<ActionResult<Product>> PostProduct([FromForm] Product product)
+        {
+            // Check ModelState before any modifications to the data model
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                if (product.PhotoFile != null && product.PhotoFile.Length > 0)
+                {
+                    var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "images");
+
+                    // Create the "images" folder if it doesn't exist
+                    if (!Directory.Exists(imagesFolder))
+                    {
+                        Directory.CreateDirectory(imagesFolder);
+                    }
+
+                    // Generate a unique filename for the uploaded file
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.PhotoFile.FileName);
+                    var filePath = Path.Combine(imagesFolder, fileName);
+
+                    // Save the file to the server
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await product.PhotoFile.CopyToAsync(stream);
+                    }
+
+                    // Update the product's image property with the filename
+                    product.ProductImage = fileName;
+                }
+
+                // Add the product to the database
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+
+                return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                return StatusCode(500, "Internal Server Error");
+            }
         }
+
+
 
         // PUT: api/products/5
         [HttpPut("{id}")]
