@@ -25,7 +25,10 @@ public class ShopController : ControllerBase
     public async Task<ActionResult<IEnumerable<Shop>>> GetShops()
     {
         //.Include(x=> x.User) بس يلزم ترجعي الداتا اللي جوات اليوزر مثلا لو بدك تعرضي اسم اليوزر او الداتا اللي جواتو بتعملي هاي الحركة يعني ما بلزم دائما تعمليها
-        var shops = await _context.Shops.ToListAsync();
+        var shops = await _context.Shops
+         .Where(s => s.IsApproved)
+         .ToListAsync();
+
         return Ok(shops);
     }
 
@@ -50,13 +53,48 @@ public class ShopController : ControllerBase
         // Get the currently authenticated user
         var userId = User.FindFirst("uid")?.Value;
 
-        // Retrieve shops associated with the current user
+        // Retrieve shops associated with the current user with approved status
         var shops = await _context.Shops
-            .Where(s => s.UserId == userId)
+            .Where(s => s.UserId == userId && s.IsApproved)
             .ToListAsync();
 
         return Ok(shops);
     }
+    // GET: api/shops/admin/pending
+    [HttpGet("admin/pending")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<IEnumerable<Shop>>> GetPendingShops()
+    {
+        var pendingShops = await _context.Shops
+            .Where(s => !s.IsApproved)
+            .ToListAsync();
+
+        return Ok(pendingShops);
+    }
+
+  
+
+
+// PUT: api/shops/admin/reject/5
+[HttpPut("admin/reject/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> RejectShop(int id)
+    {
+        var shop = await _context.Shops.FindAsync(id);
+
+        if (shop == null)
+        {
+            return NotFound();
+        }
+
+        // Optionally, you may want to perform additional actions before rejecting the shop
+
+        _context.Shops.Remove(shop);
+        await _context.SaveChangesAsync();
+
+        return Ok(new { Message = "Shop rejected ." });
+    }
+
 
     [HttpGet("userShops/{shopId}")]
     [Authorize]
@@ -91,12 +129,31 @@ public class ShopController : ControllerBase
         // Assign the user's ID to the shop
         shop.UserId = userId;
 
+        // Set the default approval status to false
+        shop.IsApproved = false;
+
         _context.Shops.Add(shop);
         await _context.SaveChangesAsync();
 
-        return CreatedAtAction("GetShop", new { id = shop.ShopId }, shop);
+        return CreatedAtAction("GetShop", new { id = shop.ShopId }, new { Message = "Shop request submitted. Awaiting approval." });
     }
+    [HttpPut("admin/approve/{id}")]
+    [Authorize(Roles = "Admin")]
+    public async Task<IActionResult> ApproveShop(int id)
+    {
+        var shop = await _context.Shops.FindAsync(id);
 
+        if (shop == null)
+        {
+            return NotFound();
+        }
+
+        shop.IsApproved = true;
+
+        await _context.SaveChangesAsync();
+
+        return Ok(new { Message = "Shop approved successfully." });
+    }
     // PUT: api/shops/5
     [HttpPut("{id}")]
     // [Authorize] // Requires authorization (you can adjust the policy as needed)
