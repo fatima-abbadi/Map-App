@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestApiJwt.Models;
 
@@ -11,9 +12,10 @@ using TestApiJwt.Models;
 namespace TestApiJwt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231216213420_rate1")]
+    partial class rate1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -505,33 +507,6 @@ namespace TestApiJwt.Migrations
                     b.ToTable("Ratings");
                 });
 
-            modelBuilder.Entity("TestApiJwt.Models.Sale", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("DurationInMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("salePercentage")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ShopId");
-
-                    b.ToTable("Sales");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -739,17 +714,6 @@ namespace TestApiJwt.Migrations
                     b.Navigation("shop");
                 });
 
-            modelBuilder.Entity("TestApiJwt.Models.Sale", b =>
-                {
-                    b.HasOne("Shop", "shop")
-                        .WithMany("Sales")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("shop");
-                });
-
             modelBuilder.Entity("Shop", b =>
                 {
                     b.Navigation("Categories");
@@ -757,8 +721,6 @@ namespace TestApiJwt.Migrations
                     b.Navigation("Favorites");
 
                     b.Navigation("Rates");
-
-                    b.Navigation("Sales");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
