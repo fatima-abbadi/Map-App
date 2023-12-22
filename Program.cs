@@ -21,6 +21,11 @@ builder.Services.Configure<JWT>(builder.Configuration.GetSection("JWT"));
 //and the database context to use for storing user and role data.
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddHostedService<SaleCleanupService>();
+builder.Services.AddTransient<SaleCleanupService>();
+builder.Services.AddScoped<SaleController>();
+
+
 
 //mapping between Auth interface and auth class 
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -81,6 +86,17 @@ builder.Services.AddCors(p => p.AddPolicy("corsePolicy", build =>
 //end corse policy 
 
 var app = builder.Build();
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
+//    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+
+//    Apply database migrations(ensure the database is created)
+//    dbContext.Database.Migrate();
+
+//    Seed data during application startup
+//    DbSeeder.Seed(dbContext);
+//}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

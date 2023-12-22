@@ -17,6 +17,8 @@ namespace TestApiJwt.Models
         public DbSet <CartItem> CartItems { get; set; }
         public DbSet<OrderHeader> OrderHeaders { get; set; }
         public DbSet<Advertisement>Advertisements { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<Sale> Sales { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -89,6 +91,23 @@ namespace TestApiJwt.Models
               .WithMany()
               .HasForeignKey(ci => ci.ShopId)
               .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.User)
+                .WithMany(u => u.Rates)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.shop)
+                .WithMany(s => s.Rates)
+                .HasForeignKey(r => r.ShopId)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<Sale>()
+                .HasOne(r => r.shop)
+                .WithMany(s => s.Sales)
+                .HasForeignKey(r => r.ShopId);
 
 
 

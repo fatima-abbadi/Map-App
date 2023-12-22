@@ -14,9 +14,18 @@ public class Shop
     public string ShopDescription { get; set; }
     
     public bool IsApproved { get; set; }
-   
+    public ShopStatus Status { get; set; } = ShopStatus.No;
+
+    public enum ShopStatus
+    {
+        Yes = 's',
+        No = 'n'
+    }
     public string UserId { get; set; }
     public ApplicationUser? User { get; set; }
     public ICollection<Category>? Categories { get; set; }
+
     public ICollection<Favorite>? Favorites { get; set; }
+    public ICollection<Rating>? Rates { get; set; }
+    public ICollection<Sale>? Sales { get; set; }   
 }
