@@ -15,6 +15,7 @@ namespace TestApiJwt.Models
         public ICollection<Shop> Shops { get; set; }
         public ICollection <Cart>? Carts { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }
-        public ICollection<OrderHeader> OrderHeaders { get; set; }
+        public ICollection<OrderHeader>? OrderHeaders { get; set; }
+        public ICollection<Rating>? Rates { get; set; }
     }
 }
