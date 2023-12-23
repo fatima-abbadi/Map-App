@@ -207,6 +207,28 @@ public class ShopController : ControllerBase
         return Ok(shop);
     }
 
+    // New action to get shops with Status 'n'
+    [HttpGet("status-n")]
+    public async Task<ActionResult<IEnumerable<Shop>>> GetShopsWithStatusN()
+    {
+        var shopsWithStatusN = await _context.Shops
+            .Where(s => s.Status == Shop.ShopStatus.No)
+            .ToListAsync();
+
+        return Ok(shopsWithStatusN);
+    }
+
+    // New action to get shops with Status 's'
+    [HttpGet("status-s")]
+    public async Task<ActionResult<IEnumerable<Shop>>> GetShopsWithStatusS()
+    {
+        var shopsWithStatusS = await _context.Shops
+            .Where(s => s.Status == Shop.ShopStatus.Yes)
+            .ToListAsync();
+
+        return Ok(shopsWithStatusS);
+    }
+
     private bool ShopExists(int id)
     {
         return _context.Shops.Any(e => e.ShopId == id);
