@@ -12,7 +12,8 @@ public class Shop
     public double ShopLocationLatitude { get; set; }
     public double ShopLocationLongitude { get; set; }
     public string ShopDescription { get; set; }
-    
+    public string PhoneNumber { get; set; }
+
     public bool IsApproved { get; set; }
     public ShopStatus Status { get; set; } = ShopStatus.No;
 

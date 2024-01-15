@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TestApiJwt.Models; // Replace with your actual namespace
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.ML;
 
 [Route("api/shops")]
 [ApiController]
@@ -32,8 +33,10 @@ public class ShopController : ControllerBase
         return Ok(shops);
     }
 
-    // GET: api/shops/5
-    [HttpGet("{id}")]
+
+
+// GET: api/shops/5
+[HttpGet("{id}")]
     public async Task<ActionResult<Shop>> GetShop(int id)
     {
         var shop = await _context.Shops.FindAsync(id);
@@ -137,6 +140,8 @@ public class ShopController : ControllerBase
 
         return CreatedAtAction("GetShop", new { id = shop.ShopId }, new { Message = "Shop request submitted. Awaiting approval." });
     }
+
+
     [HttpPut("admin/approve/{id}")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> ApproveShop(int id)
