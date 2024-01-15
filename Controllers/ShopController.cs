@@ -21,6 +21,20 @@ public class ShopController : ControllerBase
         _userManager = userManager;
     }
 
+    //get by geogrpahical bounds
+    [HttpGet("byBounds")]
+    public async Task<ActionResult<IEnumerable<Shop>>> GetShopsByBoundsAndApproval(double northEastLat, double northEastLng, double southWestLat, double southWestLng, bool isApproved)
+    {
+        // Filter shops within the provided map bounds (coordinates) and with the specified approval status
+        var shopsFiltered = await _context.Shops
+            .Where(s => s.ShopLocationLatitude <= northEastLat && s.ShopLocationLongitude <= northEastLng && s.ShopLocationLatitude >= southWestLat && s.ShopLocationLongitude >= southWestLng && s.IsApproved == isApproved)
+            .ToListAsync();
+
+        return Ok(shopsFiltered);
+    }
+
+
+
     // GET: api/shops
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Shop>>> GetShops()
