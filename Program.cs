@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -97,6 +97,25 @@ var app = builder.Build();
 //    Seed data during application startup
 //    DbSeeder.Seed(dbContext);
 //}
+
+/// Set up the path for serving images
+var imagesPath = Path.Combine(app.Environment.ContentRootPath, "images");
+if (!Directory.Exists(imagesPath))
+{
+    Directory.CreateDirectory(imagesPath);
+}
+
+// Expose the "images" path
+
+
+// Map the "images" path to the URL "/images"
+app.Map("/images", app => app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(imagesPath),
+    RequestPath = "/images"
+}));
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

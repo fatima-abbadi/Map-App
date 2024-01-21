@@ -35,7 +35,21 @@ public class CategoriesController : ControllerBase
 
         return category;
     }
+    // GET: api/Categories/ByShop/5
+    [HttpGet("ByShop/{shopId}")]
+    public async Task<ActionResult<IEnumerable<Category>>> GetCategoriesByShop(int shopId)
+    {
+        var categories = await _context.Categories
+            .Where(c => c.ShopId == shopId)
+            .ToListAsync();
 
+        if (categories == null || !categories.Any())
+        {
+            return NotFound("No categories found for the specified shop.");
+        }
+
+        return categories;
+    }
     // POST: api/Categories
     [HttpPost]
     public async Task<ActionResult<Category>> PostCategory(Category category)

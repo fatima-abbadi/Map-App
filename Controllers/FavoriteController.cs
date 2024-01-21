@@ -38,7 +38,8 @@ public class FavoriteController : ControllerBase
 
     // POST api/favorite
     [HttpPost]
-    public IActionResult AddFavorite([FromBody] Favorite favorite)
+    [Authorize]
+    public ActionResult<string> AddFavorite([FromBody] Favorite favorite)
     {
         // Extract the user id from the token
         var userId = HttpContext.User.Claims.FirstOrDefault(c => c.Type == "uid")?.Value;
@@ -53,12 +54,18 @@ public class FavoriteController : ControllerBase
             return BadRequest("Favorite already exists.");
         }
 
-        favorite.UserId = userId; // Set the user id from the token
+        // Set the UserId property manually
+        favorite.UserId = userId;
+
         _context.Favorites.Add(favorite);
         _context.SaveChanges();
 
-        return Ok("Favorite added successfully.");
+        // Return a 201 Created status along with the favorite added message
+        return CreatedAtAction(nameof(AddFavorite), "Favorite added successfully.");
     }
+
+
+
     // DELETE api/favorite/{favoriteId}
     [HttpDelete("{favoriteId}")]
     public IActionResult DeleteFavorite(int favoriteId)

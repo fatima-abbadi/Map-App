@@ -204,15 +204,25 @@ public class ShopController : ControllerBase
         return Ok();
     }
 
-    // DELETE: api/shops/5
     [HttpDelete("{id}")]
-    //[Authorize] // Requires authorization (you can adjust the policy as needed)
+    [Authorize]
     public async Task<ActionResult<Shop>> DeleteShop(int id)
     {
         var shop = await _context.Shops.FindAsync(id);
+
         if (shop == null)
         {
             return NotFound();
+        }
+
+        // Get the user ID from the token
+        var userId = User.FindFirst("uid")?.Value;
+
+        // Check if the user making the request is the owner of the shop
+        if (shop.UserId != userId)
+        {
+            // Unauthorized, the user is not the owner of the shop
+            return Forbid();
         }
 
         // Manually delete associated favorites

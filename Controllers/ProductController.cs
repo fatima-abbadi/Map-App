@@ -27,6 +27,26 @@ namespace TestApiJwt.Controllers
             return products;
         }
 
+        // GET: api/products/images/5
+        [HttpGet("images/{id}")]
+        public async Task<ActionResult<string>> GetProductImage(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null || string.IsNullOrEmpty(product.ProductImage))
+            {
+                return NotFound("Product image not found.");
+            }
+
+            // Assuming the images are stored in the "images" folder
+            var imagePath = Path.Combine("images", product.ProductImage);
+
+            // Construct the full URL path
+            var imageUrl = $"{Request.Scheme}://{Request.Host}/{imagePath}";
+
+            return imageUrl;
+        }
+
         // GET: api/products/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
@@ -39,6 +59,22 @@ namespace TestApiJwt.Controllers
             }
 
             return product;
+        }
+
+        // GET: api/products/byCategory/5
+        [HttpGet("byCategory/{categoryId}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByCategory(int categoryId)
+        {
+            var products = await _context.Products
+           .Where(p => p.CategoryId == categoryId)
+           .ToListAsync();
+
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found for the specified category.");
+            }
+
+            return products;
         }
 
 
@@ -144,4 +180,5 @@ namespace TestApiJwt.Controllers
             return _context.Products.Any(e => e.ProductId == id);
         }
     }
+
 }
