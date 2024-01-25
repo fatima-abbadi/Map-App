@@ -13,9 +13,9 @@ namespace TestApiJwt.Models
 
         public List<RefreshToken>? RefreshTokens { get; set; }
         public ICollection<Shop> Shops { get; set; }
-        public ICollection <Cart>? Carts { get; set; }
         public ICollection<Favorite>? Favorites { get; set; }
         public ICollection<OrderHeader>? OrderHeaders { get; set; }
         public ICollection<Rating>? Rates { get; set; }
+        public ICollection<CartItem>? CartItems { get; set; }
     }
 }

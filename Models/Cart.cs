@@ -13,11 +13,11 @@ namespace TestApiJwt.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CartId { get; set; }
-        public String UserId { get; set; }
         public decimal TotalPrice { get; set; }
         public DateTime? OrderDate { get; set; }//in order header 
 
-        public ApplicationUser? User { get; set; }
+        public int ShopId { get; set; }
+        public Shop? Shop   {get;set;}
      public ICollection<CartItem>? CartItems { get; set; }
       
 

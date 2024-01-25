@@ -149,6 +149,10 @@ public class ShopController : ControllerBase
         // Set the default approval status to false
         shop.IsApproved = false;
 
+        // Create a new cart for the shop
+        var cart = new Cart();
+        shop.Cart = cart; // Associate the cart with the shop
+
         _context.Shops.Add(shop);
         await _context.SaveChangesAsync();
 
