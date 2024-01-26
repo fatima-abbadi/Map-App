@@ -39,11 +39,12 @@ namespace TestApiJwt.Controllers
             }
 
             // Assuming the images are stored in the "images" folder
-            var imagePath = Path.Combine("images", product.ProductImage);
+             var imagePath = Path.Combine("images", product.ProductImage);
+            //var imagePath = $"images/{product.ProductImage}";
 
             // Construct the full URL path
             var imageUrl = $"{Request.Scheme}://{Request.Host}/{imagePath}";
-
+            
             return imageUrl;
         }
 
