@@ -94,6 +94,11 @@ namespace TestApiJwt.Models
                .HasForeignKey(ci => ci.UserId)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
+            modelBuilder.Entity<OrderHeader>()
+           .HasOne(o => o.Shop)  
+           .WithMany(s => s.OrderHeaders)  
+           .HasForeignKey(o => o.ShopId);
+
             modelBuilder.Entity<Advertisement>()
               .HasOne(ci => ci.Shop)
               .WithMany()

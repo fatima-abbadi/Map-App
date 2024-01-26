@@ -28,6 +28,7 @@ public class Shop
 
     public ICollection<Favorite>? Favorites { get; set; }
     public ICollection<Rating>? Rates { get; set; }
-    public ICollection<Sale>? Sales { get; set; } 
+    public ICollection<Sale>? Sales { get; set; }
+    public ICollection<OrderHeader>? OrderHeaders { get; set; }
     public Cart? Cart { get; set; }
 }

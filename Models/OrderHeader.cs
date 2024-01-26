@@ -20,7 +20,9 @@ namespace TestApiJwt.Models
         
         public string PhoneNumber { get; set; }
         public string paymentMethod { get; set; }
+        public int ShopId {  get; set; }
         public ApplicationUser? user { get; set; }
+        public Shop? Shop {  get; set; }
         
     }
     }
