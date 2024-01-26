@@ -17,6 +17,9 @@ namespace TestApiJwt.Models
 
         public int Quantity { get; set; }
 
+        public string UserId { get; set; }
+        public ApplicationUser? User { get; set; }
+
         //[NotMapped]
         //public decimal TotalItemPrice
         //{
@@ -29,5 +32,5 @@ namespace TestApiJwt.Models
         //        return 0; // or handle the case where Product is null
         //    }
 
-        }
+    }
 }

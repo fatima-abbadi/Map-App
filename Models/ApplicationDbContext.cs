@@ -42,10 +42,12 @@ namespace TestApiJwt.Models
                 .WithOne(c => c.Shop)
                 .HasForeignKey(c => c.ShopId);
 
-            modelBuilder.Entity<Cart>()
-               .HasOne(c => c.User)
-               .WithMany(u => u.Carts)
-               .HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.ClientSetNull); ;
+            modelBuilder.Entity<Shop>()
+            .HasOne(s => s.Cart)
+            .WithOne(c => c.Shop)
+            .HasForeignKey<Cart>(c => c.ShopId);
+
+
 
 
             modelBuilder.Entity<Cart>()
@@ -80,11 +82,22 @@ namespace TestApiJwt.Models
                .HasForeignKey(ci => ci.ProductId)
                .OnDelete(DeleteBehavior.ClientSetNull);
 
+            modelBuilder.Entity<CartItem>()
+            .HasOne(ci => ci.User)
+            .WithMany(u => u.CartItems)
+            .HasForeignKey(ci => ci.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<OrderHeader>()
                .HasOne(ci => ci.user)
                .WithMany()
                .HasForeignKey(ci => ci.UserId)
                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            modelBuilder.Entity<OrderHeader>()
+           .HasOne(o => o.Shop)  
+           .WithMany(s => s.OrderHeaders)  
+           .HasForeignKey(o => o.ShopId);
 
             modelBuilder.Entity<Advertisement>()
               .HasOne(ci => ci.Shop)

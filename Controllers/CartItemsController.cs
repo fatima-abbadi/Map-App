@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace TestApiJwt.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CartItemsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -37,6 +39,26 @@ namespace TestApiJwt.Controllers
             }
 
             return cartItem;
+        }
+        // GET: api/CartItems/ByCartId/{cartId}
+        [HttpGet("ByCartId/{cartId}")]
+        public async Task<ActionResult<IEnumerable<CartItem>>> GetCartItemsByCartId(int cartId)
+        {
+            // Get the user ID from the token
+            var userId = User.FindFirst("uid")?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                // User ID not found in the token
+                return BadRequest("User ID not found in the token.");
+            }
+
+            // Retrieve cart items based on the cartId and userId
+            var cartItems = await _context.CartItems
+                .Where(ci => ci.CartId == cartId && ci.UserId == userId)
+                .ToListAsync();
+
+            return cartItems;
         }
 
         // PUT: api/CartItems/5
@@ -73,14 +95,28 @@ namespace TestApiJwt.Controllers
         [HttpPost]
         public async Task<ActionResult<CartItem>> PostCartItem(CartItem cartItem)
         {
+            // Get the user ID from the token
+            var userId = User.FindFirst("uid")?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                // User ID not found in the token
+                return BadRequest("User ID not found in the token.");
+            }
+
+            // Assign the user ID to the cart item
+            cartItem.UserId = userId;
+
             _context.CartItems.Add(cartItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCartItem", new { id = cartItem.CartItemId }, cartItem);
         }
+    
 
-        // DELETE: api/CartItems/5
-        [HttpDelete("{id}")]
+
+// DELETE: api/CartItems/5
+[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCartItem(int id)
         {
             var cartItem = await _context.CartItems.FindAsync(id);

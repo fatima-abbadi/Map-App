@@ -78,6 +78,22 @@ namespace TestApiJwt.Controllers
             return products;
         }
 
+        // GET: api/products/byShop/{shopId}
+        [HttpGet("byShop/{shopId}")]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsByShop(int shopId)
+        {
+            var products = await _context.Products
+                .Where(p => p.Category.ShopId == shopId)
+                .ToListAsync();
+
+            if (products == null || !products.Any())
+            {
+                return NotFound("No products found for the specified shop.");
+            }
+
+            return products;
+        }
+
 
         [HttpPost]
 
@@ -132,14 +148,51 @@ namespace TestApiJwt.Controllers
 
         // PUT: api/products/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduct(int id, Product product)
+        public async Task<IActionResult> PutProduct(int id, [FromForm] Product product)
         {
             if (id != product.ProductId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
+            var existingProduct = await _context.Products.FindAsync(id);
+
+            if (existingProduct == null)
+            {
+                return NotFound();
+            }
+
+            // Check if a new photo is provided
+            if (product.PhotoFile != null && product.PhotoFile.Length > 0)
+            {
+                var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "images");
+
+                // Create the "images" folder if it doesn't exist
+                if (!Directory.Exists(imagesFolder))
+                {
+                    Directory.CreateDirectory(imagesFolder);
+                }
+
+                // Generate a unique filename for the uploaded file
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.PhotoFile.FileName);
+                var filePath = Path.Combine(imagesFolder, fileName);
+
+                // Save the file to the server
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await product.PhotoFile.CopyToAsync(stream);
+                }
+
+                // Update the product's image property with the new filename
+                existingProduct.ProductImage = fileName;
+            }
+
+            existingProduct.ProductName = product.ProductName;
+            existingProduct.ProductDescription = product.ProductDescription;
+            existingProduct.ProductPrice = product.ProductPrice;
+            existingProduct.CategoryId = product.CategoryId;
+
+            // Update other properties as needed
 
             try
             {
@@ -157,8 +210,9 @@ namespace TestApiJwt.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok("product updated successfully");
         }
+
 
         // DELETE: api/products/5
         [HttpDelete("{id}")]

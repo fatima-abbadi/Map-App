@@ -46,7 +46,7 @@ namespace TestApiJwt.Controllers
             var userId = User.FindFirst("uid")?.Value;
 
             // Assign the user's ID to the shop
-            cart.UserId = userId;
+          //  cart.UserId = userId;
 
             // Add the cart to the context
             _context.Carts.Add(cart);

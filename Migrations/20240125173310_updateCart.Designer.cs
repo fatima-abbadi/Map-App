@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TestApiJwt.Models;
 
@@ -11,9 +12,10 @@ using TestApiJwt.Models;
 namespace TestApiJwt.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240125173310_updateCart")]
+    partial class updateCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -337,17 +339,11 @@ namespace TestApiJwt.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("CartItemId");
 
                     b.HasIndex("CartId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("CartItems");
                 });
@@ -438,9 +434,6 @@ namespace TestApiJwt.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ShopId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -456,8 +449,6 @@ namespace TestApiJwt.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
-
-                    b.HasIndex("ShopId");
 
                     b.HasIndex("UserId");
 
@@ -683,17 +674,9 @@ namespace TestApiJwt.Migrations
                         .HasForeignKey("ProductId")
                         .IsRequired();
 
-                    b.HasOne("TestApiJwt.Models.ApplicationUser", "User")
-                        .WithMany("CartItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Cart");
 
                     b.Navigation("Product");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("TestApiJwt.Models.Category", b =>
@@ -730,18 +713,10 @@ namespace TestApiJwt.Migrations
                         .WithMany("OrderHeaders")
                         .HasForeignKey("ApplicationUserId");
 
-                    b.HasOne("Shop", "Shop")
-                        .WithMany("OrderHeaders")
-                        .HasForeignKey("ShopId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TestApiJwt.Models.ApplicationUser", "user")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .IsRequired();
-
-                    b.Navigation("Shop");
 
                     b.Navigation("user");
                 });
@@ -793,8 +768,6 @@ namespace TestApiJwt.Migrations
 
                     b.Navigation("Favorites");
 
-                    b.Navigation("OrderHeaders");
-
                     b.Navigation("Rates");
 
                     b.Navigation("Sales");
@@ -802,8 +775,6 @@ namespace TestApiJwt.Migrations
 
             modelBuilder.Entity("TestApiJwt.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("CartItems");
-
                     b.Navigation("Favorites");
 
                     b.Navigation("OrderHeaders");
