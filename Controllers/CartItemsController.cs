@@ -40,7 +40,6 @@ namespace TestApiJwt.Controllers
 
             return cartItem;
         }
-        // GET: api/CartItems/ByCartId/{cartId}
         [HttpGet("ByCartId/{cartId}")]
         public async Task<ActionResult<IEnumerable<CartItem>>> GetCartItemsByCartId(int cartId)
         {
@@ -55,6 +54,7 @@ namespace TestApiJwt.Controllers
 
             // Retrieve cart items based on the cartId and userId
             var cartItems = await _context.CartItems
+                .Include(ci => ci.Product) // Include the related Product
                 .Where(ci => ci.CartId == cartId && ci.UserId == userId)
                 .ToListAsync();
 
