@@ -40,6 +40,26 @@ namespace TestApiJwt.Controllers
 
             return cartItem;
         }
+        // GET: api/CartItems/ByCartId/{cartId}
+        [HttpGet("ByCartId/{cartId}")]
+        public async Task<ActionResult<IEnumerable<CartItem>>> GetCartItemsByCartId(int cartId)
+        {
+            // Get the user ID from the token
+            var userId = User.FindFirst("uid")?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                // User ID not found in the token
+                return BadRequest("User ID not found in the token.");
+            }
+
+            // Retrieve cart items based on the cartId and userId
+            var cartItems = await _context.CartItems
+                .Where(ci => ci.CartId == cartId && ci.UserId == userId)
+                .ToListAsync();
+
+            return cartItems;
+        }
 
         // PUT: api/CartItems/5
         [HttpPut("{id}")]
@@ -87,33 +107,16 @@ namespace TestApiJwt.Controllers
             // Assign the user ID to the cart item
             cartItem.UserId = userId;
 
-            // Retrieve the ShopId associated with the cartItem
-           // var shopId = cartItem.ShopId;
-
-            // Retrieve the CartId associated with the ShopId
-         //   var cartId = await _context.Shops
-             //   .Where(s => s.ShopId == shopId)
-              //  .Select(s => s.CartId)
-              //  .FirstOrDefaultAsync();
-
-          //  if (cartId == 0)
-            {
-                // Cart not found for the specified ShopId
-                return BadRequest("Cart not found for the specified ShopId.");
-            }
-
-            // Assign the retrieved CartId to the cart item
-          //  cartItem.CartId = cartId;
-
             _context.CartItems.Add(cartItem);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCartItem", new { id = cartItem.CartItemId }, cartItem);
         }
+    
 
 
-        // DELETE: api/CartItems/5
-        [HttpDelete("{id}")]
+// DELETE: api/CartItems/5
+[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCartItem(int id)
         {
             var cartItem = await _context.CartItems.FindAsync(id);

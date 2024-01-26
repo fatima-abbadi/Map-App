@@ -49,18 +49,22 @@ public class ShopController : ControllerBase
 
 
 
-// GET: api/shops/5
-[HttpGet("{id}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<Shop>> GetShop(int id)
     {
-        var shop = await _context.Shops.FindAsync(id);
+        var shop = await _context.Shops
+                                .Include(s => s.Cart) // Include the Cart object
+                                .FirstOrDefaultAsync(s => s.ShopId == id);
 
         if (shop == null)
         {
             return NotFound();
         }
 
-        return Ok(shop);
+        // Assuming CartId is a property of the Cart class
+        var cartId = shop.Cart?.CartId;
+
+        return Ok(new { Shop = shop, CartId = cartId });
     }
     //get :api/shops/userShops
     [HttpGet("userShops")]
