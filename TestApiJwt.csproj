@@ -5,6 +5,29 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="wwwroot\images\148b9b6e-909c-4f7d-8fab-d894f0b4afcc.png" />
+    <Content Remove="wwwroot\images\1fa798e3-547d-4977-b739-332359754285.png" />
+    <Content Remove="wwwroot\images\26fd07cc-23ca-421b-96e6-f671d281778a.jpg" />
+    <Content Remove="wwwroot\images\2aa3062f-6a15-40ba-b3a1-cb430e29aac8.jpg" />
+    <Content Remove="wwwroot\images\2d378d7e-5386-44db-ace9-1412eada7519.jpg" />
+    <Content Remove="wwwroot\images\45287c1f-c6c7-4e2c-9e42-aa8318ea0a88.png" />
+    <Content Remove="wwwroot\images\4f8b7bfd-9019-42ac-848a-b6b250ab3224.jpg" />
+    <Content Remove="wwwroot\images\5ed44f92-5e67-4b2d-80a9-5bde730244ff.jpg" />
+    <Content Remove="wwwroot\images\64028c28-cc9c-42f1-92dd-c1dec8881b0d.jpg" />
+    <Content Remove="wwwroot\images\674b88aa-b5f7-4b28-a558-0e2db6f76de9.jpg" />
+    <Content Remove="wwwroot\images\6c114321-5958-42c8-ab6e-a0b995a0edb6.jpg" />
+    <Content Remove="wwwroot\images\6f552f35-3e55-4e75-9a95-53bd1702270d.jpg" />
+    <Content Remove="wwwroot\images\7f7f8834-dbcd-4936-bfbd-101eb5c86434.jpg" />
+    <Content Remove="wwwroot\images\894a081e-219c-4693-bd83-e711bd892a86.jpg" />
+    <Content Remove="wwwroot\images\9b77fa7f-9b9a-4d0d-a51f-6e15076087d5.png" />
+    <Content Remove="wwwroot\images\a83818b4-c43d-446e-85eb-754d88227360.png" />
+    <Content Remove="wwwroot\images\b169d410-4253-482a-a504-a848b34eb57b.webp" />
+    <Content Remove="wwwroot\images\c001fdb8-581b-4291-a026-def2e45b31ee.jpg" />
+    <Content Remove="wwwroot\images\eb66cc86-dbf6-4974-afb5-3414ea31d96a.png" />
+    <Content Remove="wwwroot\images\fb61f3bc-e687-4188-9b6b-cb04e748f735.jpg" />
+    <Content Remove="wwwroot\images\fb6deb1f-e270-40fc-9e26-fdced7f28535.png" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Bogus" Version="35.0.1" />
     <PackageReference Include="Faker" Version="1.2.0" />
     <PackageReference Include="Faker.Net" Version="2.0.154" />
@@ -29,5 +52,28 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\148b9b6e-909c-4f7d-8fab-d894f0b4afcc.png" />
+    <None Include="wwwroot\images\1fa798e3-547d-4977-b739-332359754285.png" />
+    <None Include="wwwroot\images\26fd07cc-23ca-421b-96e6-f671d281778a.jpg" />
+    <None Include="wwwroot\images\2aa3062f-6a15-40ba-b3a1-cb430e29aac8.jpg" />
+    <None Include="wwwroot\images\2d378d7e-5386-44db-ace9-1412eada7519.jpg" />
+    <None Include="wwwroot\images\45287c1f-c6c7-4e2c-9e42-aa8318ea0a88.png" />
+    <None Include="wwwroot\images\4f8b7bfd-9019-42ac-848a-b6b250ab3224.jpg" />
+    <None Include="wwwroot\images\5ed44f92-5e67-4b2d-80a9-5bde730244ff.jpg" />
+    <None Include="wwwroot\images\64028c28-cc9c-42f1-92dd-c1dec8881b0d.jpg" />
+    <None Include="wwwroot\images\674b88aa-b5f7-4b28-a558-0e2db6f76de9.jpg" />
+    <None Include="wwwroot\images\6c114321-5958-42c8-ab6e-a0b995a0edb6.jpg" />
+    <None Include="wwwroot\images\6f552f35-3e55-4e75-9a95-53bd1702270d.jpg" />
+    <None Include="wwwroot\images\7f7f8834-dbcd-4936-bfbd-101eb5c86434.jpg" />
+    <None Include="wwwroot\images\894a081e-219c-4693-bd83-e711bd892a86.jpg" />
+    <None Include="wwwroot\images\9b77fa7f-9b9a-4d0d-a51f-6e15076087d5.png" />
+    <None Include="wwwroot\images\a83818b4-c43d-446e-85eb-754d88227360.png" />
+    <None Include="wwwroot\images\b169d410-4253-482a-a504-a848b34eb57b.webp" />
+    <None Include="wwwroot\images\c001fdb8-581b-4291-a026-def2e45b31ee.jpg" />
+    <None Include="wwwroot\images\eb66cc86-dbf6-4974-afb5-3414ea31d96a.png" />
+    <None Include="wwwroot\images\fb61f3bc-e687-4188-9b6b-cb04e748f735.jpg" />
+    <None Include="wwwroot\images\fb6deb1f-e270-40fc-9e26-fdced7f28535.png" />
   </ItemGroup>
 </Project>
