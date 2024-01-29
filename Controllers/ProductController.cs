@@ -109,7 +109,7 @@ namespace TestApiJwt.Controllers
             {
                 if (product.PhotoFile != null && product.PhotoFile.Length > 0)
                 {
-                    var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "images");
+                    var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
                     // Create the "images" folder if it doesn't exist
                     if (!Directory.Exists(imagesFolder))
@@ -165,7 +165,7 @@ namespace TestApiJwt.Controllers
             // Check if a new photo is provided
             if (product.PhotoFile != null && product.PhotoFile.Length > 0)
             {
-                var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "images");
+                var imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
 
                 // Create the "images" folder if it doesn't exist
                 if (!Directory.Exists(imagesFolder))
