@@ -41,6 +41,23 @@ namespace TestApiJwt.Controllers
             return orderHeader;
         }
 
+        // GET: api/OrderHeaders/ByShopId/5
+        [HttpGet("ByShopId/{shopId}")]
+        public async Task<ActionResult<IEnumerable<OrderHeader>>> GetOrderHeadersByShopId(int shopId)
+        {
+            var orderHeaders = await _context.OrderHeaders
+                .Where(o => o.ShopId == shopId)
+                .ToListAsync();
+
+            if (orderHeaders == null || !orderHeaders.Any())
+            {
+                return NotFound();
+            }
+
+            return orderHeaders;
+        }
+
+
         // POST: api/OrderHeader
         [HttpPost]
         [Authorize]

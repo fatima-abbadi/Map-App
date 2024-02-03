@@ -37,7 +37,20 @@ public class SaleController : ControllerBase
 
         return sale;
     }
+    [HttpGet("byshop/{shopId}")]
+    public async Task<ActionResult<IEnumerable<Sale>>> GetSalesByShopId(int shopId)
+    {
+        var sales = await _dbContext.Sales
+            .Where(s => s.ShopId == shopId)
+            .ToListAsync();
 
+        if (sales == null || !sales.Any())
+        {
+            return NotFound("No sales found for the specified shop ID.");
+        }
+
+        return Ok(sales);
+    }
     [HttpPost]
     public async Task<ActionResult<Sale>> CreateSale(Sale sale)
     {
